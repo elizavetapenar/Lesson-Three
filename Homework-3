@@ -1,0 +1,114 @@
+import Foundation
+
+// 1. Описать несколько структур - легковой автомобиль и любой грузовик.
+// 2. Структуры должны содержать марку авто, год выпуска, объем багажника / кузова, запущен ли двигатель, открыты ли окна, заполненный объем багажника.
+// 3. Описать перечисление с возможными действиями с автомобилем: запустить/заглушить двигатель, открыть/закрыть окна, погрузить/выгрузить из кузова/багажника груз определенного объема.
+// 4. Добавить в структуры метод с одним аргументом типа перечисления, который будет менять свойства структуры в зависимости от действия.
+// 5. Инициализировать несколько экземпляров структур. Применить к ним различные действия.
+// 6. Вывести значения свойств экземпляров в консоль.
+
+enum EngineState {
+    case start, stop
+}
+
+enum WindowState {
+    case open, close
+}
+
+enum TrunkState {
+    case full, empty
+}
+
+struct SomeCar {
+    let brand: String
+    let year: Int
+    var bootVolume: Int
+    var isWindowOpen = false
+
+    var engine: EngineState {
+        willSet {
+            if newValue == .start {
+                print("Запустить двигатель")
+            } else {
+                print ("Загулшить двигатель")
+            }
+        }
+    }
+    var window: WindowState {
+        willSet {
+            if newValue == .open {
+                print ("Открыть окна")
+            } else {
+                print ("Закрыть окна")
+            }
+        }
+    }
+    var trunk: TrunkState {
+        willSet {
+            if newValue == .full {
+                print ("Выгрузить из багажника вещи")
+            } else {
+                print ("Загрузить вещи в багажник")
+            }
+        }
+    }
+    mutating func windowPosition (open: Bool) {
+        isWindowOpen = open
+        print("Окна в \(brand) \(open ? "открыты" : "закрыты")")
+    }
+}
+
+struct SomeTrack {
+    let brand: String
+    let year: Int
+    var bootVolume: Int
+    var isTrunkFull = false
+
+    var engine: EngineState {
+        willSet {
+            if newValue == .start {
+                print("Запустить двигатель")
+            } else {
+                print ("Загулшить двигатель")
+            }
+        }
+    }
+    var window: WindowState {
+        willSet {
+            if newValue == .open {
+                print ("Открыть окна")
+            } else {
+                print ("Закрыть окна")
+            }
+        }
+    }
+    var trunk: TrunkState {
+        willSet {
+            if newValue == .full {
+                print ("Выгрузить груз из кузова")
+            } else {
+                print ("Загрузить груз в кузов")
+            }
+        }
+    }
+    mutating func trunkLoad (full: Bool) {
+        isTrunkFull = full
+        print("Кузов в \(brand) \(full ? "полный" : "пустой")")
+
+    }
+}
+
+var car1 = SomeCar(brand: "BMW", year: 2019, bootVolume: 200, engine: .start, window: .close, trunk: .empty)
+car1.windowPosition(open: false)
+car1.engine = .start
+car1.window = .open
+car1.trunk = .full
+print("Бренд: \(car1.brand), год выпуска: \(car1.year), объем багажника: \(car1.bootVolume) л.")
+
+
+var truck1 = SomeTrack(brand: "MAN", year: 2010, bootVolume: 1000, engine: .start, window: .close, trunk: .full)
+truck1.trunkLoad(full: true)
+truck1.engine = .stop
+truck1.window = .close
+truck1.trunk = .empty
+print("Бренд: \(truck1.brand), год выпуска: \(truck1.year), объем багажника: \(truck1.bootVolume) л.")
